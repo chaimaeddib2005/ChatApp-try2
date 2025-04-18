@@ -3,9 +3,11 @@
       <h2>Sign Up</h2>
   
       <form @submit.prevent="handleSignUp">
+        <input v-model="name" type="text" placeholder="Name" />
         <input v-model="email" type="email" placeholder="Email" />
         <input v-model="password" type="password" placeholder="Password" />
         <button type="submit">Register</button>
+  
         <p v-if="error">{{ error }}</p>
         <p>
           Déjà inscrit ?
@@ -22,6 +24,7 @@
   import { doc, setDoc } from 'firebase/firestore';
   import { useRouter } from 'vue-router';
   
+  const name = ref('');
   const email = ref('');
   const password = ref('');
   const error = ref('');
@@ -30,45 +33,44 @@
   const handleSignUp = async () => {
     error.value = '';
   
-    // Vérifie le domaine
     if (!email.value.toLowerCase().endsWith('@um6p.ma')) {
       error.value = 'Vous devez utiliser une adresse @um6p.ma';
       return;
     }
   
-    // Vérifie la longueur du mot de passe
     if (password.value.length < 6) {
       error.value = 'Mot de passe trop court';
       return;
     }
   
     try {
-      // Création du compte
       await signUp(email.value, password.value);
       const user = auth.currentUser;
   
-      // Ajoute l'utilisateur dans Firestore
       await setDoc(doc(db, "users", user.uid), {
         email: user.email,
         uid: user.uid,
-        name: "testUser", // Tu peux ajouter un champ pour ça dans le formulaire
-        role: "normal",
+        name: name.value, 
+        photoURL: user.photoURL || "",
         state: "offline",
-        photoURL: user.photoURL || ""
+        sentInvitations : [],
+        Groups: [],
+        invitations: [],
+        Contacts: {}
       });
   
-      router.push('/chat');
+      router.push('/home');
     } catch (err) {
-    if (err.code === 'auth/user-not-found') {
-      error.value = "Aucun compte associé à cette adresse email.";
-    } else if (err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
-      error.value = "Email ou mot de passe incorrect.";
-    } else if (err.code === 'auth/invalid-email') {
-      error.value = "Adresse email invalide.";
-    } else {
-      error.value = err.message;
+      if (err.code === 'auth/user-not-found') {
+        error.value = "Aucun compte associé à cette adresse email.";
+      } else if (err.code === 'auth/wrong-password' || err.code === 'auth/invalid-credential') {
+        error.value = "Email ou mot de passe incorrect.";
+      } else if (err.code === 'auth/invalid-email') {
+        error.value = "Adresse email invalide.";
+      } else {
+        error.value = err.message;
+      }
     }
-  }
   };
   </script>
   
