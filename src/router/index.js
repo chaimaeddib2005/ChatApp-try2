@@ -4,7 +4,14 @@ import RegisterPage from '@/components/RegisterPage.vue';
 import WelcomingPage from '@/components/WelcomingPage.vue';
 import ChatView from '@/components/ChatView.vue'; 
 import ProfilePage from '@/components/ProfilePage.vue';
+import GroupChatView from '@/components/ChatGroupe.vue'
 const routes = [
+  {
+    path:'/chat/:groupId',
+    name: 'GroupChatView',
+    component: GroupChatView,
+    props:true
+  },
   {
     path:'/ProfileView',
     name:'ProfileView',
