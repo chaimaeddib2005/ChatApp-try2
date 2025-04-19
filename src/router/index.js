@@ -4,8 +4,20 @@ import RegisterPage from '@/components/RegisterPage.vue';
 import WelcomingPage from '@/components/WelcomingPage.vue';
 import ChatView from '@/components/ChatView.vue'; 
 import ProfilePage from '@/components/ProfilePage.vue';
-import GroupChatView from '@/components/ChatGroupe.vue'
+import GroupChatView from '@/components/ChatGroupe.vue';
+import CreateGroup from '@/components/CreateGroup.vue';
+import GroupInfos from '@/components/GroupeInfos';
 const routes = [
+  {
+    path:'/GroupInfos/:groupId',
+    component:GroupInfos,
+    name: 'GroupInfos'
+  },
+  {
+    path:'/CreateGroup',
+    component: CreateGroup,
+    name:'CreateGroup',
+  },
   {
     path:'/chat/:groupId',
     name: 'GroupChatView',

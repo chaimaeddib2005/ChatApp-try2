@@ -43,7 +43,9 @@
     },
     methods: {
       toggleSelection() {
-        this.$emit('UserSelected', this.user); // still emitting the UID
+        this.$emit('user-selected', {
+           uid: this.user // passing the user ID which is expected in the parent
+  });
       },
       async fetchUserData() {
         try {
@@ -52,7 +54,7 @@
           if (userSnap.exists()) {
             this.userData = userSnap.data();
           } else {
-            cconsole.warn(`User document not found for UID: ${this.user}`);
+            console.warn(`User document not found for UID: ${this.user}`);
 
           }
         } catch (err) {

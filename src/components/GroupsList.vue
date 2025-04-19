@@ -1,16 +1,19 @@
 <template>
     <div class="contacts-container">
-      <h2>Groups</h2>
+      <div style="display:grid;grid-template-columns:1fr 1fr ">
+        <div>Groups</div>
+        <div><button  @click="goToCreateGroup">Create new group</button></div>
+      </div>
       <div
         v-for="group in filteredGroups"
         :key="group.id"
         class="contact"
         @click="goToGroup(group.id)"
       >
-        <img :src="group.photoURL || '/default-group.png'" alt="Group" class="profile-img" />
+        <img :src="group.photoURL || '/default.jpg'" alt="Group" class="profile-img" />
         <div class="contact-info">
           <strong>{{ group.name }}</strong>
-          <p>{{ group.lastMessage || 'No messages yet' }}</p>
+         
         </div>
       </div>
     </div>
@@ -18,11 +21,13 @@
   
   <script>
   import { db } from '../firebase';
+
   import {
     doc,
     getDoc
   } from 'firebase/firestore';
   import { getAuth, onAuthStateChanged } from 'firebase/auth';
+
   
   export default {
     name: 'GroupList',
@@ -46,17 +51,24 @@
     },
     computed: {
       filteredGroups() {
+        console.log("groupes",this.groups.length);
         if (!this.searchQuery) return this.groups;
+        
         return this.groups.filter(group =>
           group.name.toLowerCase().includes(this.searchQuery.toLowerCase())
         );
       },
     },
     methods: {
+        goToCreateGroup(){
+      
+        this.$router.push({ name: 'CreateGroup' })
+      },
       async fetchGroups(userId) {
         const userDoc = await getDoc(doc(db, 'users', userId));
         const userData = userDoc.data();
-        const groupIds = userData?.Groups || [];
+        console.log(userData?.groups)
+        const groupIds = userData?.groups || [];
   
         const groupDataArray = await Promise.all(groupIds.map(async (groupId) => {
           const groupDoc = await getDoc(doc(db, 'groups', groupId));
@@ -65,23 +77,13 @@
           const group = groupDoc.data();
   
           // Fetch the last message if exists
-          let lastMessage = '';
-          const messages = group.messages || [];
-  
-          if (messages.length > 0) {
-            const lastMessageId = messages[messages.length - 1];
-            const lastMessageDoc = await getDoc(doc(db, 'group_messages', lastMessageId));
-            if (lastMessageDoc.exists()) {
-              const msgData = lastMessageDoc.data();
-              lastMessage = msgData.message || '';
-            }
-          }
+       
   
           return {
             id: groupId,
             name: group.name || 'Unnamed Group',
             photoURL: group.photoURL || '',
-            lastMessage,
+          
           };
         }));
   
