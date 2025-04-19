@@ -1,15 +1,44 @@
 <template>
   <div class="container">
     <button @click="goBackToChatList" id="gobackbut">Back to Chat List</button>
-    <small v-if="otherUserId" class="status-indicator">
-      {{ otherUserStatus || 'offline' }}
-      <span v-if="isOtherUserTyping"> (typing...)</span>
-    </small>
-    <ul>
+    <div class="chat-header">
+      <div class="user-info">
+        <img 
+          v-if="otherUserPfp" 
+          :src="otherUserPfp" 
+          alt="Profile picture" 
+          class="profile-picture"
+        >
+        <div v-else class="profile-placeholder">
+          {{ otherUsername.charAt(0) }}
+        </div>
+        <h3>{{ otherUsername }}</h3>
+      </div>
+      <small v-if="otherUserId" class="status-indicator">
+        {{ otherUserStatus || 'offline' }}
+        <span v-if="isOtherUserTyping"> (typing...)</span>
+      </small>
+    </div>
+   
+
+    <div v-if="showDeleteModal" class="modal-overlay">
+    <div class="modal">
+      <h3>Delete Message</h3>
+      <p>Are you sure you want to delete this message?</p>
+      <div class="modal-actions">
+        <button @click="confirmDelete" class="confirm-btn">Delete</button>
+        <button @click="cancelDelete" class="cancel-btn">Cancel</button>
+      </div>
+      </div>
+      </div>
+    
+    <ul ref="messagesContainer">
       <li
         v-for="msg in messageList"
         :key="msg.id"
         :class="msg.sender === currentUser?.uid ? 'sent' : 'received'"
+        @mouseover="hoveredMessage = msg.id"
+          @mouseleave="hoveredMessage = null"
       >
         <div v-if="isImageMessage(msg.message)">
           <img :src="msg.message" alt="Image" class="chat-image" />
@@ -18,6 +47,14 @@
           {{ msg.message }}
         </div>
         <small class="timestamp">{{ formatTimestamp(msg.timestamp) }}</small>
+        <button 
+        v-if="msg.sender === currentUser?.uid && hoveredMessage === msg.id"
+        @click.stop="deleteMessage(msg.id)"
+        class="delete-button"
+      >
+        <i class="fas fa-trash"></i>
+      </button>
+
       </li>
     </ul>
     <div class="input-area">
@@ -53,7 +90,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { ref, onMounted, onBeforeUnmount, nextTick } from 'vue';
 import { getDatabase, ref as dbRef, set, onDisconnect, onValue} from 'firebase/database';
 import { useRoute } from 'vue-router';
 import { getAuth } from 'firebase/auth';
@@ -67,6 +104,7 @@ import {
   arrayUnion,
   collection,
   serverTimestamp,
+  deleteDoc
 } from 'firebase/firestore';
 import { db } from '../firebase';
 
@@ -82,16 +120,92 @@ const messageList = ref([]);
 const previewUrl = ref('');
 const fileInput = ref(null);
 const otherUserStatus = ref('offline');
+const otherUsername = ref('');
+const otherUserPfp = ref(''); // Add this with your other refs
 const isOtherUserTyping = ref(false);
+const messagesContainer = ref(null);
+const hoveredMessage = ref(null);
+const showDeleteModal = ref(false);
+const messageToDelete = ref(null);
 let typingTimeout = null;
 let otherUserId = null;
 let unsubscribeStatus = null;
 let unsubscribeTyping = null;
 let chatUnsub = null;
 
-const goBackToChatList = () => {
-  router.push('/home/contacts');
+
+const scrollToBottom = () => {
+  nextTick(() => {
+    if (messagesContainer.value) {
+      messagesContainer.value.scrollTop = messagesContainer.value.scrollHeight;
+    }
+  });
 };
+
+const goBackToChatList = () => {
+  router.push('/chatList');
+};
+
+
+const deleteMessage = (messageId) => {
+messageToDelete.value = messageId;
+showDeleteModal.value = true;
+};
+
+
+const confirmDelete = async () => {
+if (!messageToDelete.value) return;
+
+try {
+  const chatRef = doc(db, 'chats', chatId);
+  const chatDoc = await getDoc(chatRef);
+  
+  if (chatDoc.exists()) {
+    const currentMessages = chatDoc.data().messages || [];
+    const updatedMessages = currentMessages.filter(id => id !== messageToDelete.value);
+    
+    await updateDoc(chatRef, {
+      messages: updatedMessages
+    });
+    
+    await deleteDoc(doc(db, 'chatMessages', messageToDelete.value));
+    
+    
+  }
+} catch (error) {
+  console.error('Error deleting message:', error);
+} finally {
+  cancelDelete();
+}
+};
+
+const cancelDelete = () => {
+showDeleteModal.value = false;
+messageToDelete.value = null;
+};
+
+async function fetchOtherUserData() {
+  try {
+    const chatDoc = await getDoc(doc(db, 'chats', chatId));
+    if (chatDoc.exists()) {
+      const chatData = chatDoc.data();
+      otherUserId = chatData.user1 === currentUser?.uid ? chatData.user2 : chatData.user1;
+      
+      const userDoc = await getDoc(doc(db, 'users', otherUserId));
+      if (userDoc.exists()) {
+        const userData = userDoc.data();
+        otherUsername.value = userData.name;
+        otherUserPfp.value = userData.pfp; // Assuming 'pfp' is the field name
+        console.log('Fetched user data:', { 
+          name: otherUsername.value, 
+          pfp: otherUserPfp.value 
+        });
+      }
+    }
+  } catch (error) {
+    console.error("Error fetching other user data:", error);
+  }
+}
 
 const setupPresence = async () => {
   const rtdb = getDatabase();
@@ -235,6 +349,7 @@ async function loadMessagesByIds(ids) {
 
     messages.sort((a, b) => a.timestamp - b.timestamp);
     messageList.value = messages;
+    scrollToBottom(); 
   } catch (error) {
     console.error("Error loading messages:", error);
   }
@@ -271,6 +386,7 @@ async function sendCombinedMessage() {
   } catch (error) {
     console.error('Error sending message:', error);
   }
+  scrollToBottom();
 }
 
 const onDrop = (e) => {
@@ -294,7 +410,8 @@ const convertToBase64 = (file) => {
 onMounted(async () => {
   try {
     await setupPresence();
-    
+    await fetchOtherUserData();
+    console.log('User data fetched');
     const chatRef = doc(db, 'chats', chatId);
     chatUnsub = onSnapshot(chatRef, (chatSnap) => {
       if (chatSnap.exists()) {
@@ -308,6 +425,7 @@ onMounted(async () => {
     }, (error) => {
       console.error("Chat listener error:", error);
     });
+    scrollToBottom();
   } catch (error) {
     console.error("Error initializing chat:", error);
   }
@@ -361,6 +479,45 @@ onBeforeUnmount(() => {
   width: 150px;
   height: 35px;
   border-radius: 10px;
+}
+.chat-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 15px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 5px;
+}
+
+.profile-picture {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.profile-placeholder {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: #4caf50;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.chat-header h3 {
+  margin: 0;
+  color: #333;
 }
 
 ul {
@@ -497,6 +654,96 @@ button i {
   font-size: 12px;
 }
 
+.delete-button {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  background-color: #ff4444;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 0;
+  opacity: 0.8;
+  transition: opacity 0.2s;
+}
+
+.delete-button:hover {
+  opacity: 1;
+}
+
+.delete-button i {
+  font-size: 12px;
+}
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+
+.modal {
+  background-color: white;
+  padding: 20px;
+  border-radius: 8px;
+  width: 90%;
+  max-width: 400px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.modal h3 {
+  margin-top: 0;
+  color: #333;
+}
+
+.modal p {
+  margin-bottom: 20px;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+}
+
+.confirm-btn {
+  background-color: #ff4444;
+  color: white;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 50px;
+}
+
+.confirm-btn:hover {
+  background-color: #cc0000;
+}
+
+.cancel-btn {
+  background-color: #f0f0f0;
+  color: #333;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 50px;
+}
+
+.cancel-btn:hover {
+  background-color: #e0e0e0;
+}
 
 .image-preview img {
   max-width: 120px;

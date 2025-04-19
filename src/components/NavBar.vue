@@ -114,7 +114,7 @@
         this.showInvitations = !this.showInvitations;
       },
       async loadInvitations() {
-        if (!this.currentUser || !this.currentUseruid){
+        if (!this.currentUser || !this.currentUser.uid){
             console.warn("Skipping loadInvitions: currentuser is not ready");
             return;
         }
