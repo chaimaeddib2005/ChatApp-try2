@@ -206,228 +206,196 @@ const goBackToHome = () => {
 </script>
 
 <style scoped>
-/* Add custom styling for the button */
+.pastel-reported-discussions {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 20px;
+  background: #f9f5ee; /* Warm ivory background */
+  min-height: 100vh;
+  font-family: 'Amiri', 'Noto Sans Arabic', sans-serif;
+}
+
 .go-back-btn {
-  background: #ff69b4;
-  color: white;
+  background-color: #8b3a3a; /* Moroccan red */
+  color: #f5e0c7;
   border: none;
   padding: 10px 15px;
-  border-radius: 5px;
+  border-radius: 20px;
   cursor: pointer;
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
   margin-bottom: 20px;
-}
-
-.go-back-btn i {
-  font-size: 1.2rem;
+  box-shadow: 0 2px 5px rgba(139, 90, 43, 0.3);
+  transition: all 0.3s ease;
 }
 
 .go-back-btn:hover {
-  background: #ff4e8f;
+  background-color: #a56a37;
+  transform: translateY(-2px);
 }
 
-  /* Base styling from ReportedDiscussions */
+.section-header {
+  color: #5a3e36; /* Dark brown */
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #d4a762; /* Gold accent */
+}
+
+.subsection-header {
+  color: #5a3e36;
+  font-size: 1.2rem;
+  margin: 1.5rem 0 1rem;
+  position: relative;
+  padding-bottom: 0.3rem;
+  border-bottom: 1px solid #d4c9b8;
+}
+
+.upload-box {
+  background: rgba(255, 255, 255, 0.9);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 8px rgba(139, 90, 43, 0.1);
+  border: 1px solid #d4a762;
+  text-align: center;
+  cursor: pointer;
+  margin-bottom: 1.5rem;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(5px);
+}
+
+.upload-box:hover {
+  box-shadow: 0 4px 12px rgba(139, 90, 43, 0.2);
+}
+
+.avatar {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin-bottom: 1rem;
+  border: 3px solid #d4a762;
+}
+
+.upload-text {
+  color: #8b5a2b;
+  margin-top: 0.5rem;
+}
+
+.form-group {
+  margin-bottom: 1.2rem;
+}
+
+.form-label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #5a3e36;
+  font-weight: 500;
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.8rem;
+  border-radius: 6px;
+  border: 1px solid #d4c9b8;
+  background: #f9f5f0;
+  color: #5a3e36;
+  transition: all 0.2s ease;
+  font-family: 'Amiri', serif;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: #8b5a2b;
+  box-shadow: 0 0 0 2px rgba(139, 90, 43, 0.2);
+}
+
+.save-btn, .password-btn, .delete-btn {
+  padding: 0.8rem 1.5rem;
+  border-radius: 20px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1rem 0;
+  box-shadow: 0 2px 5px rgba(139, 90, 43, 0.2);
+  font-family: 'Amiri', serif;
+}
+
+.save-btn {
+  background-color: #8b3a3a;
+  color: #f5e0c7;
+  border: none;
+}
+
+.save-btn:hover {
+  background-color: #a56a37;
+  transform: translateY(-2px);
+}
+
+.password-btn {
+  background-color: #c9b18b; /* Gold */
+  color: #5a3e36;
+  border: none;
+}
+
+.password-btn:hover {
+  background-color: #d4a762;
+  transform: translateY(-2px);
+}
+
+.delete-btn {
+  background-color: #a52a2a; /* Darker red */
+  color: #f5e0c7;
+  border: none;
+}
+
+.delete-btn:hover {
+  background-color: #8b0000;
+  transform: translateY(-2px);
+}
+
+.message {
+  margin-top: 1.5rem;
+  padding: 1rem;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.success {
+  background-color: rgba(166, 217, 166, 0.3);
+  color: #256029;
+  border: 1px solid #4caf50;
+}
+
+.error {
+  background-color: rgba(255, 179, 179, 0.3);
+  color: #990000;
+  border: 1px solid #f44336;
+}
+
+@media (max-width: 600px) {
   .pastel-reported-discussions {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 1.5rem;
-  }
-  
-  .section-header {
-    color: #5a4a42;
-    font-size: 1.5rem;
-    margin-bottom: 1.5rem;
-    position: relative;
-    padding-bottom: 0.5rem;
-  }
-  
-  .section-header:after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 100px;
-    height: 3px;
-    background: linear-gradient(90deg, #a7d2e9, #dab6e9);
-    border-radius: 3px;
-  }
-  
-  .subsection-header {
-    color: #5a4a42;
-    font-size: 1.2rem;
-    margin: 1.5rem 0 1rem;
-    position: relative;
-    padding-bottom: 0.3rem;
-  }
-  
-  .subsection-header:after {
-    content: "";
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    width: 70px;
-    height: 2px;
-    background: linear-gradient(90deg, #a7d2e9, #dab6e9);
-    border-radius: 2px;
-  }
-  
-  /* Upload box styling */
-  .upload-box {
-    background: white;
-    border-radius: 12px;
-    padding: 1.5rem;
-    box-shadow: 0 2px 8px rgba(167,210,233,0.15);
-    border: 1px solid rgba(220,182,233,0.2);
-    text-align: center;
-    cursor: pointer;
-    margin-bottom: 1.5rem;
-    transition: all 0.3s ease;
-  }
-  
-  .upload-box:hover {
-    box-shadow: 0 4px 12px rgba(167,210,233,0.25);
+    padding: 1rem;
   }
   
   .avatar {
-    width: 150px;
-    height: 150px;
-    object-fit: cover;
-    border-radius: 50%;
-    margin-bottom: 1rem;
-    border: 3px solid rgba(220,182,233,0.3);
+    width: 120px;
+    height: 120px;
   }
   
-  .upload-text {
-    color: #8b9bab;
-    margin-top: 0.5rem;
+  .section-header {
+    font-size: 1.3rem;
   }
   
-  /* Form styling */
-  .form-group {
-    margin-bottom: 1.2rem;
+  .subsection-header {
+    font-size: 1.1rem;
   }
-  
-  .form-label {
-    display: block;
-    margin-bottom: 0.5rem;
-    color: #5a4a42;
-    font-weight: 500;
-  }
-  
-  .form-input {
-    width: 100%;
-    padding: 0.8rem;
-    border-radius: 6px;
-    border: 1px solid rgba(220,182,233,0.5);
-    background: white;
-    color: #5a4a42;
-    transition: all 0.2s ease;
-  }
-  
-  .form-input:focus {
-    outline: none;
-    border-color: #8b6cb3;
-    box-shadow: 0 0 0 3px rgba(139,108,179,0.1);
-  }
-  
-  /* Button styling */
-  .save-btn {
-    background: rgba(139,108,179,0.1);
-    color: #8b6cb3;
-    border: 1px solid rgba(139,108,179,0.3);
-    padding: 0.8rem 1.5rem;
-    border-radius: 6px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin: 1rem 0;
-  }
-  
-  .save-btn:hover {
-    background: rgba(139,108,179,0.2);
-  }
-  
-  .password-btn {
-    background: rgba(167,210,233,0.1);
-    color: #5a8baa;
-    border: 1px solid rgba(167,210,233,0.3);
-    padding: 0.8rem 1.5rem;
-    border-radius: 6px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin: 1rem 0;
-  }
-  
-  .password-btn:hover {
-    background: rgba(167,210,233,0.2);
-  }
-  
-  .delete-btn {
-    background: rgba(232,122,93,0.1);
-    color: #e87a5d;
-    border: 1px solid rgba(232,122,93,0.3);
-    padding: 0.8rem 1.5rem;
-    border-radius: 6px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    margin: 1rem 0;
-  }
-  
-  .delete-btn:hover {
-    background: rgba(232,122,93,0.2);
-  }
-  
-  /* Message styling */
-  .message {
-    margin-top: 1.5rem;
-    padding: 1rem;
-    border-radius: 6px;
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
-  }
-  
-  .success {
-    background-color: rgba(166, 217, 166, 0.2);
-    color: #256029;
-    border: 1px solid rgba(166, 217, 166, 0.5);
-  }
-  
-  .error {
-    background-color: rgba(255, 179, 179, 0.2);
-    color: #990000;
-    border: 1px solid rgba(255, 179, 179, 0.5);
-  }
-  
-  @media (max-width: 600px) {
-    .pastel-reported-discussions {
-      padding: 1rem;
-    }
-    
-    .avatar {
-      width: 120px;
-      height: 120px;
-    }
-    
-    .section-header {
-      font-size: 1.3rem;
-    }
-    
-    .subsection-header {
-      font-size: 1.1rem;
-    }
-  }
-  </style>
+}
+</style>
