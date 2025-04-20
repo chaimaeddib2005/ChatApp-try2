@@ -362,8 +362,16 @@ async function sendCombinedMessage() {
   if (!text && !image) return;
 
   try {
+    const chatRef = doc(db, 'chats', chatId);
+    const chatDoc = await getDoc(chatRef);
+    if (!chatDoc.exists()) return;
+
+    const chatData = chatDoc.data();
+    const senderId = currentUser.uid;
+    const receiverId = chatData.user1 === senderId ? chatData.user2 : chatData.user1;
     const messageData = {
       sender: currentUser?.uid,
+      receiver: receiverId,
       message: image || text,
       timestamp: serverTimestamp(),
       chatId: chatId
