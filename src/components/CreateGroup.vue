@@ -1,9 +1,9 @@
 <template>
-  <div >
+  <div>
     <NavBar/>
     <div class="create-group">
-    <h1>Create a New Group</h1>
-  
+      <h1>Create a New Group</h1>
+    
       <div class="group-photo-section">
         <div class="photo-preview" @click="triggerFileInput">
           <img v-if="groupPhotoPreview" :src="groupPhotoPreview" alt="Group preview" class="preview-image" />
@@ -41,13 +41,12 @@
               @user-selected="toggleMemberSelection"
             />
           </div>
-                  </div>
+        </div>
       </div>
       
       <button @click="createGroup" class="submit-button" :disabled="isUploading">
         {{ isUploading ? 'Creating...' : 'Create Group' }}
       </button>
- 
     </div>
   </div>
 </template>
@@ -284,93 +283,111 @@ export default {
   padding: 2rem;
   background-color: #ffffff;
   border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
 h1 {
   text-align: center;
-  color: #2c3e50;
+  color: #d37a14;
   margin-bottom: 2rem;
-  font-size: 1.8rem;
+  font-size: 2rem;
+  font-weight: 600;
 }
 
 .form-group {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.8rem;
 }
 
 label {
   display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 600;
-  color: #2c3e50;
+  margin-bottom: 0.6rem;
+  font-weight: 500;
+  color: #333;
+  font-size: 0.95rem;
 }
 
 input[type="text"],
 textarea {
   width: 100%;
-  padding: 0.75rem;
-  border: 1px solid #ddd;
-  border-radius: 6px;
+  padding: 0.85rem;
+  border: 1px solid #dcdfe6;
+  border-radius: 8px;
   font-size: 1rem;
-  transition: border-color 0.3s;
+  transition: all 0.3s ease;
+  background-color: #f9fafc;
 }
 
 input[type="text"]:focus,
 textarea:focus {
-  border-color: #4a89dc;
+  border-color: #d37a14;
   outline: none;
-  box-shadow: 0 0 0 2px rgba(74, 137, 220, 0.2);
+  box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.2);
+  background-color: #fff;
 }
 
 textarea {
-  min-height: 100px;
+  min-height: 120px;
   resize: vertical;
+  line-height: 1.5;
 }
 
 .members-list {
   max-height: 300px;
   overflow-y: auto;
-  border: 1px solid #eee;
-  border-radius: 6px;
-  padding: 0.5rem;
+  border: 1px solid #e8eaed;
+  border-radius: 8px;
+  padding: 0.8rem;
+  background-color: #f9fafc;
 }
 
 .user-to-group {
-  margin-bottom: 0.5rem;
+  margin-bottom: 0.8rem;
 }
 
 .submit-button {
   width: 100%;
-  padding: 0.75rem;
-  background-color: #4a89dc;
+  padding: 0.9rem;
+  background-color: #d69317;
   color: white;
   border: none;
-  border-radius: 6px;
+  border-radius: 8px;
   font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: all 0.3s ease;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 5px rgba(233, 170, 10, 0.3);
 }
 
 .submit-button:hover {
-  background-color: #3a70c2;
+  background-color: #d37a14;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 8px rgba(238, 207, 8, 0.4);
+}
+
+.submit-button:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 3px rgba(26, 115, 232, 0.4);
 }
 
 .submit-button:disabled {
-  background-color: #cccccc;
+  background-color: #b8c2cc;
   cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 /* Group photo styles */
 .group-photo-section {
   display: flex;
   justify-content: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
 }
 
 .photo-preview {
-  width: 120px;
-  height: 120px;
+  width: 140px;
+  height: 140px;
   border-radius: 50%;
   background-color: #f5f7fa;
   display: flex;
@@ -379,29 +396,33 @@ textarea {
   justify-content: center;
   cursor: pointer;
   overflow: hidden;
-  border: 2px dashed #ccc;
-  transition: all 0.3s;
+  border: 2px dashed #c0c8d1;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
 }
 
 .photo-preview:hover {
-  border-color: #4a89dc;
-  background-color: #ebf0f7;
+  border-color: #d37a14;
+  background-color: #edf2fc;
+  transform: scale(1.03);
 }
 
 .photo-placeholder {
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: #7f8c8d;
+  color: #e19e10;
 }
 
 .photo-placeholder i {
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
+  font-size: 2.2rem;
+  margin-bottom: 0.8rem;
+  color: #d37a14;
 }
 
 .photo-placeholder span {
-  font-size: 0.8rem;
+  font-size: 0.9rem;
+  font-weight: 500;
 }
 
 .preview-image {

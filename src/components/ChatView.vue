@@ -475,33 +475,47 @@ onBeforeUnmount(() => {
 .container {
   width: 100%;
   max-width: 600px;
-  margin: 40px auto;
-  padding: 20px;
+  margin: 0 auto;
+  height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: #ffffff;
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  background: #f9f5ee; /* Warm ivory background */
+  font-family: 'Amiri', serif;
 }
-#gobackbut{
+
+#gobackbut {
   width: 150px;
   height: 35px;
-  border-radius: 10px;
+  border-radius: 20px;
+  background-color: #8b3a3a; /* Moroccan red */
+  color: #f5e0c7; /* Light beige */
+  border: none;
+  margin: 10px;
+  cursor: pointer;
+  box-shadow: 0 2px 5px rgba(139, 90, 43, 0.3);
+  transition: all 0.3s ease;
 }
+
+#gobackbut:hover {
+  background-color: #a56a37;
+  transform: translateY(-2px);
+}
+
+/* Header - Matches group chat style */
 .chat-header {
   display: flex;
   flex-direction: column;
   align-items: center;
-  margin-bottom: 15px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid #eee;
+  padding: 12px 16px;
+  background-color: #8b3a3a; /* Moroccan red */
+  color: #f5e0c7; /* Light beige text */
+  box-shadow: 0 2px 5px rgba(90, 62, 54, 0.1);
 }
 
 .user-info {
   display: flex;
   align-items: center;
-  gap: 10px;
-  margin-bottom: 5px;
+  gap: 15px;
 }
 
 .profile-picture {
@@ -509,101 +523,117 @@ onBeforeUnmount(() => {
   height: 40px;
   border-radius: 50%;
   object-fit: cover;
+  border: 2px solid #d4a762; /* Gold accent */
 }
 
 .profile-placeholder {
   width: 40px;
   height: 40px;
   border-radius: 50%;
-  background-color: #4caf50;
-  color: white;
+  background-color: #8b3a3a;
+  color: #f5e0c7;
   display: flex;
   align-items: center;
   justify-content: center;
   font-weight: bold;
+  border: 2px solid #d4a762;
 }
 
-.chat-header h3 {
-  margin: 0;
-  color: #333;
+.status-indicator {
+  color: #c7a374; /* Gold text */
+  font-size: 0.8rem;
 }
 
+/* Messages area */
 ul {
   flex: 1;
   overflow-y: auto;
-  padding: 0 10px;
-  margin-bottom: 20px;
-  max-height: 400px;
+  padding: 16px;
+  background: transparent;
+  margin: 0;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
+/* Message bubbles */
 li {
-  list-style: none;
   max-width: 75%;
-  padding: 10px 14px;
+  padding: 12px 16px;
   border-radius: 20px;
   position: relative;
   word-wrap: break-word;
   line-height: 1.5;
   font-size: 0.95rem;
-  transition: background-color 0.2s;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 10px rgba(139, 58, 58, 0.1);
 }
 
 .sent {
   align-self: flex-end;
-  background-color: #4caf50;
-  color: #fff;
+  background-color: #8b3a3a; /* Moroccan red */
+  color: #f5e0c7;
   border-bottom-right-radius: 4px;
 }
 
 .received {
   align-self: flex-start;
-  background-color: #f0f0f0;
-  color: #333;
+  background-color: #f0e6d6; /* Light tea color */
+  color: #5a3e36; /* Dark brown */
+  border: 1px solid #d4c9b8;
   border-bottom-left-radius: 4px;
 }
 
 .chat-image {
   max-width: 100%;
+  max-height: 300px;
   border-radius: 10px;
   margin-top: 6px;
+  object-fit: contain;
+  border: 1px solid #d4a762;
 }
 
 .timestamp {
+  display: block;
   font-size: 0.7rem;
   margin-top: 4px;
   opacity: 0.7;
   text-align: right;
+  color: inherit;
 }
 
+/* Input area */
 .input-area {
   display: flex;
   align-items: center;
   gap: 10px;
-  margin-top: auto;
-  padding-top: 10px;
-  border-top: 1px solid #eee;
+  padding: 12px 16px;
+  background-color: #f0e6d6;
+  border-top: 1px solid #d4c9b8;
+  position: sticky;
+  bottom: 0;
 }
 
 input[type="text"] {
   flex: 1;
-  padding: 10px 14px;
+  padding: 12px 16px;
   font-size: 16px;
-  border: 1px solid #ccc;
+  border: 1px solid #d4c9b8;
   border-radius: 20px;
   outline: none;
-  transition: border-color 0.2s;
+  transition: all 0.3s ease;
+  background-color: #f9f5f0;
+  font-family: 'Amiri', serif;
 }
 
 input[type="text"]:focus {
-  border-color: #4caf50;
+  border-color: #8b5a2b;
+  box-shadow: 0 0 0 2px rgba(139, 90, 43, 0.2);
 }
 
 button {
-  background-color: #4caf50;
-  color: #fff;
+  background-color: #8b3a3a;
+  color: white;
   border: none;
   border-radius: 50%;
   width: 42px;
@@ -612,35 +642,29 @@ button {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.2s ease-in-out;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(139, 90, 43, 0.3);
 }
 
 button:hover {
-  background-color: #43a047;
-}
-
-button i {
-  font-size: 18px;
+  background-color: #a56a37;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(139, 90, 43, 0.4);
 }
 
 .icon-button {
-  background-color: #2196f3;
   margin-left: 4px;
 }
 
-.icon-button:hover {
-  background-color: #1e88e5;
-}
 .image-preview {
   position: relative;
-  margin-top: 10px;
-  text-align: center;
+  margin-right: 10px;
 }
 
 .cancel-button {
   position: absolute;
-  top: -10px;
-  right: -10px;
+  top: -8px;
+  right: -8px;
   background-color: #ff4444;
   color: white;
   border: none;
@@ -652,14 +676,11 @@ button i {
   justify-content: center;
   cursor: pointer;
   padding: 0;
+  font-size: 12px;
 }
 
 .cancel-button:hover {
   background-color: #cc0000;
-}
-
-.cancel-button i {
-  font-size: 12px;
 }
 
 .delete-button {
@@ -677,17 +698,17 @@ button i {
   justify-content: center;
   cursor: pointer;
   padding: 0;
-  opacity: 0.8;
-  transition: opacity 0.2s;
+  z-index: 1;
+  font-size: 12px;
+  transition: all 0.3s ease;
 }
 
 .delete-button:hover {
-  opacity: 1;
+  background-color: #cc0000;
+  transform: scale(1.1);
 }
 
-.delete-button i {
-  font-size: 12px;
-}
+/* Modal styles */
 .modal-overlay {
   position: fixed;
   top: 0;
@@ -702,67 +723,95 @@ button i {
 }
 
 .modal {
-  background-color: white;
+  background-color: #f9f5f0;
   padding: 20px;
-  border-radius: 8px;
-  width: 90%;
-  max-width: 400px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  width: 300px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(90, 62, 54, 0.2);
+  border: 1px solid #e0d7c7;
 }
 
 .modal h3 {
-  margin-top: 0;
-  color: #333;
+  color: #5a3e36;
+  margin-bottom: 15px;
+  font-family: 'Amiri', serif;
 }
 
 .modal p {
+  color: #5a3e36;
   margin-bottom: 20px;
+  font-family: 'Amiri', serif;
 }
 
 .modal-actions {
   display: flex;
-  justify-content: flex-end;
+  justify-content: center;
   gap: 10px;
 }
 
 .confirm-btn {
-  background-color: #ff4444;
+  background-color: #8b3a3a;
   color: white;
   padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
+  border-radius: 20px;
   cursor: pointer;
-  width: 50px;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(139, 90, 43, 0.3);
+  font-family: 'Amiri', serif;
 }
 
 .confirm-btn:hover {
-  background-color: #cc0000;
+  background-color: #a56a37;
+  transform: translateY(-2px);
 }
 
 .cancel-btn {
-  background-color: #f0f0f0;
-  color: #333;
+  background-color: #f0e6d6;
+  color: #5a3e36;
+  border: 1px solid #d4c9b8;
   padding: 8px 16px;
-  border: none;
-  border-radius: 4px;
+  border-radius: 20px;
   cursor: pointer;
-  width: 50px;
+  transition: all 0.3s ease;
+  font-family: 'Amiri', serif;
 }
 
 .cancel-btn:hover {
-  background-color: #e0e0e0;
+  background-color: #e6d9c2;
+  transform: translateY(-2px);
 }
 
-.image-preview img {
-  max-width: 120px;
-  border-radius: 12px;
-  border: 1px solid #ccc;
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .container {
+    margin: 0 auto;
+    border-radius: 0;
+  }
+  
+  input[type="text"] {
+    padding: 10px 14px;
+  }
 }
 
-.status-indicator {
-  display: block;
-  text-align: center;
-  margin: 10px 0;
-  color: #666;
+@media (max-width: 480px) {
+  .chat-header {
+    padding: 10px 12px;
+  }
+  
+  .profile-picture, .profile-placeholder {
+    width: 36px;
+    height: 36px;
+  }
+  
+  li {
+    padding: 10px 14px;
+    font-size: 0.9rem;
+  }
+  
+  button {
+    width: 38px;
+    height: 38px;
+  }
 }
 </style>
