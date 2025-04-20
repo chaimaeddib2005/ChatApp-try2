@@ -4,7 +4,7 @@
     
     <div v-if="$route.meta.hasBackground" class="fullscreen-background">
       <h1 class="app-title"> كَاسْ داتايْ</h1>
-      <p class="app-motto">Conversations start here.</p>
+      <p class="app-motto">the simplicity of a chat, the warmth of the moment.</p>
     </div>
 
     <router-view :searchQuery="searchQuery" />

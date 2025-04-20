@@ -1,22 +1,187 @@
 <template>
-    <div class="discover-container">
-      <h2>Discover People</h2>
-      <div v-if="filteredSuggestedUsers.length">
-        <div
-          v-for="user in filteredSuggestedUsers"
-          :key="user.id"
-          class="user-card"
-        >
-          <img :src="user.photoURL || '/default-profile.png'" alt="Profile" />
-          <div class="user-info">
-            <strong>{{ user.name }}</strong>
-            <button @click="sendInvitation(user.id)">Connect</button>
-          </div>
+  <div class="discover-container">
+    <h2>Discover People</h2>
+    <div v-if="filteredSuggestedUsers.length" class="users-grid">
+      <div
+        v-for="user in filteredSuggestedUsers"
+        :key="user.id"
+        class="user-card"
+      >
+        <img 
+          :src="user.photoURL || '/default-profile.png'" 
+          alt="Profile" 
+          class="profile-img"
+        />
+        <div class="user-info">
+          <strong>{{ user.name }}</strong>
+          <button @click="sendInvitation(user.id)" class="connect-button">
+            Connect
+          </button>
         </div>
       </div>
-      <div v-else class="empty-message">No suggestions found</div>
     </div>
-  </template>
+    <div v-else class="empty-message">
+      <p>No suggestions found</p>
+    </div>
+  </div>
+</template>
+
+<style scoped>
+.discover-container {
+  padding: 1.5rem;
+  width: 100%;
+  margin: 0 auto;
+  
+  background-size: cover;
+  background-position: center;
+  background: #f9f5ee;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  font-family: 'Amiri', 'Noto Sans Arabic', sans-serif;
+}
+
+.discover-container h2 {
+  color: #8b3a3a; /* Soft beige */
+  font-family: 'Amiri', serif;
+  text-align: center;
+  margin-bottom: 2rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 2px solid #c9b18b; /* Gold accent */
+  font-size: 1.8rem;
+  width: 100%;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.users-grid {
+  width: 100%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.user-card {
+  display: flex;
+  align-items: center;
+  padding: 1.25rem;
+  background: rgba(249, 245, 233, 0.85); /* Tea-stained paper */
+  border-radius: 12px;
+  box-shadow: 0 3px 10px rgba(90, 62, 54, 0.2);
+  transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+  backdrop-filter: blur(5px);
+  width: 80%;
+  border-left: 4px solid transparent;
+  border: 1px solid #c9b18b; /* Gold border */
+}
+
+.user-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(90, 62, 54, 0.3);
+  border-left-color: #c9b18b;
+  background: rgba(255, 255, 255, 0.9);
+}
+
+.profile-img {
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #c9b18b;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  margin-right: 1.25rem;
+  transition: transform 0.3s ease;
+}
+
+.user-card:hover .profile-img {
+  transform: scale(1.05);
+}
+
+.user-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.user-info strong {
+  color: #5a3e36; /* Dark brown */
+  font-weight: 700;
+  font-size: 1.1rem;
+  font-family: 'Amiri', serif;
+}
+
+.connect-button {
+  background-color: #8b3a3a; /* Terracotta */
+  color: #f5e0c7;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Amiri', serif;
+  box-shadow: 0 2px 5px rgba(139, 90, 43, 0.3);
+  align-self: flex-start;
+}
+
+.connect-button:hover {
+  background-color: #a56a37;
+  transform: translateY(-2px);
+}
+
+.empty-message {
+  color: #f5e0c7;
+  text-align: center;
+  margin-top: 2rem;
+  font-size: 1.2rem;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .discover-container {
+    padding: 1rem;
+  }
+  
+  .discover-container h2 {
+    font-size: 1.5rem;
+  }
+  
+  .user-card {
+    width: 90%;
+    padding: 1rem;
+  }
+  
+  .profile-img {
+    width: 48px;
+    height: 48px;
+  }
+}
+
+@media (max-width: 480px) {
+  .discover-container {
+    padding: 0.75rem;
+  }
+  
+  .user-card {
+    width: 95%;
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .profile-img {
+    margin-right: 0;
+    margin-bottom: 1rem;
+  }
+  
+  .connect-button {
+    align-self: center;
+  }
+}
+</style>
   
   <script>
   import { db } from '../firebase';
@@ -114,75 +279,4 @@ async created() {
   };
   </script>
   
-  <style scoped>
-  .discover-container {
-    padding: 20px;
-    max-width: 600px;
-    margin: auto;
-  }
-  
-  h2 {
-    font-size: 1.8rem;
-    margin-bottom: 20px;
-    text-align: center;
-    color: #333;
-  }
-  
-  .user-card {
-    display: flex;
-    align-items: center;
-    background: #f9f9f9;
-    padding: 12px;
-    border-radius: 10px;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
-    margin-bottom: 1rem;
-    transition: transform 0.2s ease;
-  }
-  
-  .user-card:hover {
-    transform: translateY(-3px);
-  }
-  
-  img {
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    object-fit: cover;
-  }
-  
-  .user-info {
-    display: flex;
-    flex-direction: column;
-    margin-left: 15px;
-    flex: 1;
-  }
-  
-  .user-info strong {
-    font-size: 1.1rem;
-    margin-bottom: 6px;
-    color: #222;
-  }
-  
-  .user-info button {
-    background-color: #007bff;
-    color: white;
-    border: none;
-    padding: 6px 12px;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background 0.2s;
-    font-size: 0.9rem;
-  }
-  
-  .user-info button:hover {
-    background-color: #0056b3;
-  }
-  
-  .empty-message {
-    text-align: center;
-    color: #888;
-    margin-top: 40px;
-    font-style: italic;
-  }
-  </style>
   

@@ -1,4 +1,5 @@
 <template>
+  <div class="whole">
   <div class="chat-container">
     <!-- Header Section -->
     <div class="chat-header">
@@ -106,6 +107,7 @@
       </div>
     </div>
   </div>
+</div>
 </template>
 
 <script setup>
@@ -326,14 +328,18 @@ onBeforeUnmount(() => {
 
 <style scoped>
 .chat-container {
+  
   width: 100%;
   max-width: 600px;
   margin: 0 auto;
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background-color: #ffffff;
+  background: #cbb58e; /* Warm ivory background */
   position: relative;
+  border: 1px solid #d4c9b8;
+  border-radius: 500px;
+  box-shadow: 0 4px 20px rgba(90, 62, 54, 0.1);
 }
 
 /* Header Styles */
@@ -342,12 +348,13 @@ onBeforeUnmount(() => {
   align-items: center;
   justify-content: space-between;
   padding: 12px 16px;
-  background-color: #128C7E;
+  background-color: #8b3a3a; /* Moroccan red */
   color: white;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 5px rgba(90, 62, 54, 0.1);
   z-index: 10;
   position: sticky;
   top: 0;
+
 }
 
 .back-button, .info-button {
@@ -358,7 +365,7 @@ onBeforeUnmount(() => {
   cursor: pointer;
   padding: 8px;
   border-radius: 50%;
-  transition: background-color 0.2s;
+  transition: background-color 0.3s;
   width: 40px;
   height: 40px;
   display: flex;
@@ -385,7 +392,7 @@ onBeforeUnmount(() => {
   border-radius: 50%;
   object-fit: cover;
   margin-right: 12px;
-  border: 2px solid white;
+  border: 2px solid #d4a762; /* Gold accent */
 }
 
 .group-name {
@@ -394,6 +401,7 @@ onBeforeUnmount(() => {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-family: 'Amiri', serif;
 }
 
 /* Messages Container */
@@ -401,8 +409,8 @@ onBeforeUnmount(() => {
   flex: 1;
   overflow-y: auto;
   padding: 16px;
-  background-color: #e5ddd5;
-  background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAABmJLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH4AkEEjIZJvLzFQAAAB1pVFh0Q29tbWVudAAAAAAAQ3JlYXRlZCB3aXRoIEdJTVBkLmUHAAAANElEQVQ4y2NgGAWjYBSMglEwCkbBKBgFowA3YGRkZPwPxTMyMjL+x2XIKBgFo2AUjIJRMApGAQAz4wL1v9xQlQAAAABJRU5ErkJggg==');
+  background: rgba(255, 255, 255, 0.9); /* Semi-transparent white */
+  backdrop-filter: blur(5px);
 }
 
 ul {
@@ -417,35 +425,35 @@ ul {
 /* Message bubble */
 li {
   max-width: 75%;
-  padding: 10px 14px;
+  padding: 12px 16px;
   border-radius: 20px;
   position: relative;
   word-wrap: break-word;
   line-height: 1.5;
   font-size: 0.95rem;
-  transition: background-color 0.2s;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 10px rgba(139, 58, 58, 0.1);
 }
 
 .sent {
   align-self: flex-end;
-  background-color: #DCF8C6;
-  color: #000;
+  background-color: #8b3a3a; /* Moroccan red */
+  color: white;
   border-bottom-right-radius: 4px;
   margin-top: 8px;
 }
 
 .received {
   align-self: flex-start;
-  background-color: #ffffff;
-  color: #333;
+  background-color: #f9f5f0; /* Tea cream */
+  color: #5a3e36; /* Moroccan tea brown */
   border-bottom-left-radius: 4px;
   margin-top: 8px;
-  box-shadow: 0 1px 1px rgba(0,0,0,0.1);
+  border: 1px solid #d4c9b8;
 }
 
-/* Add extra padding only for messages with sender info */
 .with-sender-info {
-  padding-top: 36px; /* Make room for sender info */
+  padding-top: 36px;
 }
 
 /* Sender info styles */
@@ -463,12 +471,14 @@ li {
   height: 24px;
   border-radius: 50%;
   object-fit: cover;
+  border: 1px solid #d4a762; /* Gold accent */
 }
 
 .sender-name {
   font-size: 0.75rem;
   font-weight: bold;
-  color: #128C7E;
+  color: #8b5a2b;
+  font-family: 'Amiri', serif;
 }
 
 .message-text {
@@ -481,6 +491,7 @@ li {
   border-radius: 10px;
   margin-top: 6px;
   object-fit: contain;
+  border: 1px solid #d4a762;
 }
 
 .timestamp {
@@ -489,6 +500,7 @@ li {
   margin-top: 4px;
   opacity: 0.7;
   text-align: right;
+  color: inherit;
 }
 
 /* Input Area */
@@ -497,30 +509,32 @@ li {
   align-items: center;
   gap: 10px;
   padding: 12px 16px;
-  background-color: #f0f0f0;
-  border-top: 1px solid #ddd;
+  background-color: #f0e6d6;
+  border-top: 1px solid #d4c9b8;
   position: sticky;
   bottom: 0;
 }
 
 input[type="text"] {
   flex: 1;
-  padding: 10px 14px;
+  padding: 12px 16px;
   font-size: 16px;
-  border: 1px solid #ccc;
+  border: 1px solid #d4c9b8;
   border-radius: 20px;
   outline: none;
-  transition: border-color 0.2s;
-  background-color: white;
+  transition: all 0.3s ease;
+  background-color: #f9f5f0;
+  font-family: 'Amiri', serif;
 }
 
 input[type="text"]:focus {
-  border-color: #128C7E;
+  border-color: #8b5a2b;
+  box-shadow: 0 0 0 2px rgba(139, 90, 43, 0.2);
 }
 
-.send-button {
-  background-color: #128C7E;
-  color: #fff;
+.send-button, .upload-button {
+  background-color: #8b3a3a;
+  color: white;
   border: none;
   border-radius: 50%;
   width: 42px;
@@ -529,11 +543,14 @@ input[type="text"]:focus {
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.2s ease-in-out;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(139, 90, 43, 0.3);
 }
 
-.send-button:hover {
-  background-color: #075E54;
+.send-button:hover, .upload-button:hover {
+  background-color: #a56a37;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(139, 90, 43, 0.4);
 }
 
 .file-upload-container {
@@ -541,21 +558,9 @@ input[type="text"]:focus {
   display: flex;
   align-items: center;
 }
-
-.upload-button {
-  background-color: transparent;
-  color: #128C7E;
-  border: none;
-  font-size: 1.2rem;
-  cursor: pointer;
-  padding: 8px;
-  transition: color 0.2s;
+.whole{
+  background-color: #f6ebd8;
 }
-
-.upload-button:hover {
-  color: #075E54;
-}
-
 .image-preview {
   position: relative;
   margin-right: 10px;
@@ -601,10 +606,12 @@ input[type="text"]:focus {
   padding: 0;
   z-index: 1;
   font-size: 12px;
+  transition: all 0.3s ease;
 }
 
 .delete-button:hover {
   background-color: #cc0000;
+  transform: scale(1.1);
 }
 
 /* Delete confirmation modal */
@@ -622,12 +629,19 @@ input[type="text"]:focus {
 }
 
 .modal-content {
-  background-color: white;
+  background-color: #f9f5f0;
   padding: 20px;
   border-radius: 10px;
   width: 300px;
   text-align: center;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+  box-shadow: 0 4px 20px rgba(90, 62, 54, 0.2);
+  border: 1px solid #e0d7c7;
+}
+
+.modal-content p {
+  color: #5a3e36;
+  margin-bottom: 20px;
+  font-family: 'Amiri', serif;
 }
 
 .modal-buttons {
@@ -638,30 +652,68 @@ input[type="text"]:focus {
 }
 
 .confirm-button {
-  background-color: #ff4444;
+  background-color: #8b3a3a;
   color: white;
   border: none;
   padding: 8px 16px;
   border-radius: 20px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 5px rgba(139, 90, 43, 0.3);
+  font-family: 'Amiri', serif;
 }
 
 .confirm-button:hover {
-  background-color: #cc0000;
+  background-color: #a56a37;
+  transform: translateY(-2px);
 }
 
-.modal-buttons .cancel-button {
-  background-color: #6c757d;
-  color: white;
-  border: none;
+.cancel-button {
+  background-color: #f0e6d6;
+  color: #5a3e36;
+  border: 1px solid #d4c9b8;
   padding: 8px 16px;
   border-radius: 20px;
   cursor: pointer;
-  transition: background-color 0.2s;
+  transition: all 0.3s ease;
+  font-family: 'Amiri', serif;
 }
 
-.modal-buttons .cancel-button:hover {
-  background-color: #5a6268;
+.cancel-button:hover {
+  background-color: #e6d9c2;
+  transform: translateY(-2px);
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .group-name {
+    font-size: 1rem;
+  }
+  
+  input[type="text"] {
+    padding: 10px 14px;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .chat-header {
+    padding: 10px 12px;
+  }
+  
+  .group-photo {
+    width: 36px;
+    height: 36px;
+  }
+  
+  li {
+    padding: 10px 14px;
+    font-size: 0.9rem;
+  }
+  
+  .send-button, .upload-button {
+    width: 38px;
+    height: 38px;
+  }
 }
 </style>
