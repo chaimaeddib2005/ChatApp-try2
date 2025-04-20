@@ -1,4 +1,5 @@
 <template>
+<div class="whole">
   <div class="container">
     <button @click="goBackToChatList" id="gobackbut">Back to Chat List</button>
     <div class="chat-header">
@@ -86,6 +87,7 @@
         </button>
       </div>
     </div> 
+  </div>
   </div>
 </template>
 
@@ -555,7 +557,9 @@ ul {
   flex-direction: column;
   gap: 10px;
 }
-
+.whole{
+  background-color: #f6ebd8;
+}
 /* Message bubbles */
 li {
   max-width: 75%;
