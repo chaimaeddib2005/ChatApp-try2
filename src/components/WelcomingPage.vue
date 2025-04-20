@@ -1,4 +1,4 @@
-WelcomingPage: <template>
+<template>
     <div class="ghibli-pastel-layout">
       <!-- Floating decorative shapes -->
       <div class="floating-circle" v-for="n in 4" :key="'circle-'+n"></div>
@@ -7,10 +7,11 @@ WelcomingPage: <template>
       <div class="content-container">
         <div class="header-section">
           <h1 class="main-title">
-            <span class="title-text">Welcome to <span class="arabic-flow">RIWAQ</span></span>
+            <span class="title-text">Welcome to <span class="arabic-flow"> كَاسْ داتايْ
+            </span></span>
             <span class="title-decoration"></span>
           </h1>
-          <p class="subtitle">Join our community of thinkers and creators</p>
+          <p class="subtitle">Fast, secure, and made for real talk.</p>
         </div>
         
         <div class="welcome-actions">
@@ -37,6 +38,7 @@ WelcomingPage: <template>
   </script>
   
   <style scoped>
+    @import url('https://fonts.googleapis.com/css2?family=Lateef&display=swap');
   .ghibli-pastel-layout {
     min-height: 100vh;
     background: linear-gradient(135deg, #f8f5ff 0%, #f0f9ff 100%); /* Original light purple gradient */
@@ -73,7 +75,9 @@ WelcomingPage: <template>
     position: relative;
     z-index: 2;
   }
-  
+  .arabic-flow{
+    font-family: 'Lateef', serif;
+  }
   .title-decoration {
     position: absolute;
     bottom: 5px;
@@ -81,9 +85,9 @@ WelcomingPage: <template>
     width: 100%;
     height: 12px;
     background: linear-gradient(90deg, 
-      rgba(167,210,233,0.4) 0%, 
+      rgba(161, 93, 29, 0.4) 0%, 
       rgba(249,213,110,0.4) 50%, 
-      rgba(220,182,233,0.4) 100%);
+      rgba(233, 218, 182, 0.4) 100%);
     z-index: 1;
     border-radius: 6px;
   }
@@ -139,7 +143,7 @@ WelcomingPage: <template>
 
 /* Updated Button Colors */
 .ghibli-btn.primary {
-  background-color: rgba(139, 108, 179, 0.9); /* Main purple */
+  background: linear-gradient(to right, #8b3a3a,#a04a4a);  
   color: white;
   box-shadow: 0 4px 12px rgba(139, 108, 179, 0.3);
 }
@@ -149,7 +153,7 @@ WelcomingPage: <template>
 }
 
 .ghibli-btn.secondary {
-  background-color: rgba(167, 210, 233, 0.9); /* Soft blue */
+  background-color: rgba(233, 228, 167, 0.9); /* Soft blue */
   color: #5a4a42; /* Dark brown text */
   box-shadow: 0 4px 12px rgba(167, 210, 233, 0.3);
 }
@@ -176,7 +180,7 @@ WelcomingPage: <template>
   .floating-circle {
     position: absolute;
     border-radius: 50%;
-    background: rgba(226, 175, 226, 0.6); /* Pastel purple */
+    background: rgba(226, 206, 175, 0.6); /* Pastel purple */
     animation: floatCircle 10s linear infinite;
     z-index: 1;
   }
@@ -219,7 +223,7 @@ WelcomingPage: <template>
     height: 0;
     border-left: 40px solid transparent;
     border-right: 40px solid transparent;
-    border-bottom: 70px solid rgba(255, 202, 147, 0.6); /* Pastel yellow */
+    border-bottom: 70px solid rgba(255, 210, 147, 0.6); /* Pastel yellow */
     animation: floatTriangle 12s linear infinite;
     z-index: 1;
   }
