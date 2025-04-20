@@ -3,8 +3,9 @@
     <input
       v-model="searchKeyword"
       type="text"
-      placeholder="Search contacts..."
+      placeholder="Search..."
       @input="applyFilters"
+      class="search-input"
     />
     <div class="nav-links">
       <router-link
@@ -26,8 +27,8 @@
         Groups
       </router-link>
       <div class="notification-box" ref="dropdownRef">
-        <button @click="toggleInvitationsBox">
-          📩
+        <button @click="toggleInvitationsBox" class="invite-button">
+          <i class="fas fa-bell"></i>
           <span v-if="received.length || pending.length" class="badge">
             {{ received.length + pending.length }}
           </span>
@@ -38,12 +39,12 @@
             <div v-for="user in received" :key="user.uid" class="invitation-item">
               <span>{{ user.name }}</span>
               <div>
-                <button @click="acceptInvitation(user)">Accept</button>
+                <button @click="acceptInvitation(user)" class="accept-btn">Accept</button>
                 <button @click="declineInvitation(user)" class="decline-btn">Decline</button>
               </div>
             </div>
           </div>
-          <div v-else>No invitations</div>
+          <div v-else class="empty-state">No invitations</div>
 
           <h4>Pending Sent Invitations</h4>
           <div v-if="pending.length">
@@ -52,16 +53,238 @@
               <button class="decline-btn" @click="cancelInvitation(user)">Cancel</button>
             </div>
           </div>
-          <div v-else>No pending invitations</div>
+          <div v-else class="empty-state">No pending invitations</div>
         </div>
       </div>
-      <router-link to="/ProfileView">
+      <router-link to="/ProfileView" class="profile-link">
         <img :src="userPhotoURL || defaultProfileImage" alt="Profile" class="nav-profile" />
       </router-link>
-      <button @click="logoutUser">Logout</button>
+      <button @click="logoutUser" class="logout-btn">Logout</button>
     </div>
   </nav>
 </template>
+
+
+<style scoped>
+  /* Moroccan Tea Theme Navbar */
+  .navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 30px;
+    background: linear-gradient(to right, #8b3a3a, #a04a4a);
+    color: #f0e6d8;
+    box-shadow: 0 4px 15px rgba(139, 58, 58, 0.3);
+    border-bottom: 1px solid #d4a762;
+  }
+  
+  .search-input {
+    padding: 8px 15px;
+    border-radius: 20px;
+    border: 1px solid #d4a762;
+    background: rgba(255, 253, 245, 0.9);
+    width: 40%;
+    max-width: 400px;
+    font-family: 'Amiri', sans-serif;
+    color: #5c4d3a;
+    transition: all 0.3s ease;
+  }
+  
+  .search-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(212, 167, 98, 0.5);
+  }
+  
+  .search-input::placeholder {
+    color: #a08b70;
+  }
+  
+  .nav-links {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+  
+  .nav-links a {
+    color: #f0e6d8;
+    text-decoration: none;
+    font-weight: 600;
+    padding: 8px 15px;
+    border-radius: 5px;
+    transition: all 0.3s ease;
+    font-family: 'Amiri', sans-serif;
+    position: relative;
+  }
+  
+  .nav-links a.active {
+    background-color: rgba(212, 167, 98, 0.3);
+  }
+  
+  .nav-links a.active::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 15px;
+    right: 15px;
+    height: 2px;
+    background: #d4a762;
+  }
+  
+  .nav-links a:hover:not(.active) {
+    background-color: rgba(212, 167, 98, 0.2);
+  }
+  
+  .nav-profile {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid #d4a762;
+    transition: transform 0.3s ease;
+  }
+  
+  .nav-profile:hover {
+    transform: scale(1.1);
+  }
+  
+  .notification-box {
+    position: relative;
+  }
+  
+  .invite-button {
+    background: transparent;
+    border: none;
+    color: #f0e6d8;
+    font-size: 1.3rem;
+    cursor: pointer;
+    padding: 5px;
+    position: relative;
+    transition: transform 0.3s ease;
+  }
+  
+  .invite-button:hover {
+    transform: scale(1.1);
+  }
+  
+  .badge {
+    background: #3a8b3a;
+    border-radius: 50%;
+    padding: 3px 7px;
+    font-size: 12px;
+    color: white;
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    font-weight: bold;
+  }
+  
+  .invitation-dropdown {
+    position: absolute;
+    top: 45px;
+    right: 0;
+    background: #faf6f0;
+    color: #5c4d3a;
+    width: 280px;
+    border-radius: 8px;
+    padding: 15px;
+    box-shadow: 0 5px 20px rgba(139, 58, 58, 0.3);
+    z-index: 1000;
+    border: 1px solid #d4a762;
+  }
+  
+  .invitation-dropdown h4 {
+    color: #8b3a3a;
+    margin: 10px 0 5px;
+    padding-bottom: 5px;
+    border-bottom: 1px dashed #d4a762;
+    font-family: 'Amiri', sans-serif;
+  }
+  
+  .invitation-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    border-bottom: 1px solid rgba(212, 167, 98, 0.3);
+  }
+  
+  .invitation-item:last-child {
+    border-bottom: none;
+  }
+  
+  .accept-btn {
+    background: #3a8b3a;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    margin-right: 5px;
+  }
+  
+  .accept-btn:hover {
+    background: #2d6d2d;
+  }
+  
+  .decline-btn {
+    background: #8b3a3a;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+  }
+  
+  .decline-btn:hover {
+    background: #6d2d2d;
+  }
+  
+  .empty-state {
+    color: #a08b70;
+    font-style: italic;
+    padding: 5px 0;
+  }
+  
+  .logout-btn {
+    background: transparent;
+    color: #f0e6d8;
+    border: 1px solid #d4a762;
+    border-radius: 5px;
+    padding: 8px 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    font-family: 'Amiri', sans-serif;
+  }
+  
+  .logout-btn:hover {
+    background: rgba(212, 167, 98, 0.2);
+  }
+  
+  @media (max-width: 768px) {
+    .navbar {
+      padding: 10px 15px;
+      flex-direction: column;
+      gap: 10px;
+    }
+    
+    .search-input {
+      width: 100%;
+      max-width: none;
+    }
+    
+    .nav-links {
+      width: 100%;
+      justify-content: space-between;
+      gap: 10px;
+    }
+    
+    .invitation-dropdown {
+      right: -50px;
+    }
+  }
+</style>
+
 
 <script>
 import { useAuth } from '@/composables/useAuth';
@@ -237,102 +460,3 @@ export default {
   }
 };
 </script>
-
-<style scoped>
-.navbar {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
-  padding: 10px 20px;
-  background: #333;
-  color: white;
-}
-
-.navbar input {
-  padding: 6px 10px;
-  border-radius: 8px;
-  border: none;
-  width: 60%;
-  max-width: 300px;
-}
-
-.nav-links {
-  display: flex;
-  gap: 10px;
-  align-items: center;
-}
-
-.nav-links a {
-  color: white;
-  text-decoration: none;
-  font-weight: bold;
-  padding: 5px 10px;
-  border-radius: 6px;
-  transition: background 0.2s;
-}
-
-.nav-links a.active {
-  background-color: #555;
-}
-
-.nav-profile {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-}
-
-.notification-box {
-  position: relative;
-}
-
-.notification-box .badge {
-  background: red;
-  border-radius: 50%;
-  padding: 2px 6px;
-  font-size: 12px;
-  color: white;
-  position: absolute;
-  top: -5px;
-  right: -10px;
-}
-
-.invitation-dropdown {
-  position: absolute;
-  top: 40px;
-  right: 0;
-  background: white;
-  color: black;
-  width: 250px;
-  border-radius: 8px;
-  padding: 10px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
-  z-index: 999;
-}
-
-.invitation-item {
-  display: flex;
-  justify-content: space-between;
-  padding: 5px 0;
-}
-
-.pending-status {
-  color: gray;
-  font-style: italic;
-}
-
-.decline-btn {
-  margin-left: 5px;
-  background: transparent;
-  color: red;
-  border: 1px solid red;
-  border-radius: 4px;
-  padding: 2px 6px;
-  cursor: pointer;
-  transition: background 0.2s;
-}
-
-.decline-btn:hover {
-  background: rgba(255, 0, 0, 0.1);
-}
-</style>

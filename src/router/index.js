@@ -45,19 +45,23 @@ const routes = [
     path: '/home',
     name : 'Home',
     component: () => import('@/components/HomePage.vue'),
-    meta: { requiresAuth: true },
+    meta: { requiresAuth: true,hasBackground: true },
     children: [
       {
         path: 'discover',
-        component: () => import('@/components/DiscoverList.vue')
+        component: () => import('@/components/DiscoverList.vue'),
+        meta: { hasBackground: false }
       },
       {
         path: 'contacts',
-        component: () => import('@/components/ContactsList.vue')
+        component: () => import('@/components/ContactsList.vue'),
+        meta: { hasBackground: false }
       },
       {
         path: 'groups',
-        component: () => import('@/components/GroupsList.vue')
+        component: () => import('@/components/GroupsList.vue'),
+        meta: { hasBackground: false }
+
       }
     ]
   }
