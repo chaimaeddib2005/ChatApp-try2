@@ -143,7 +143,7 @@ const scrollToBottom = () => {
 };
 
 const goBackToChatList = () => {
-  router.push('/chatList');
+  router.push('/home/contacts');
 };
 
 

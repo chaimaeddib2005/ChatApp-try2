@@ -1,199 +1,233 @@
 <template>
-    <div class="pastel-reported-discussions" v-if="user">
-      <h2 class="section-header">Profile Info</h2>
-  
-      <!-- Image Upload & Preview -->
-      <div class="upload-box" @dragover.prevent @drop.prevent="onDrop">
-        <input type="file" ref="fileInput" @change="onFileChange" hidden />
-        <img
-          :src="previewUrl || user.photoURL || defaultPhoto"
-          alt="Profile Picture"
-          class="avatar"
-          @click="triggerFileInput"
-        />
-        <p class="upload-text">Click or drag image here to upload</p>
-      </div>
-  
-      <div class="form-group">
-        <label class="form-label"><strong>Name:</strong></label>
-        <input v-model="editableUser.name" class="form-input" />
-      </div>
-  
-      <div class="form-group">
-        <label class="form-label"><strong>Email:</strong></label>
-        <input v-model="editableUser.email" class="form-input" />
-      </div>
-  
-      <button @click="saveProfileChanges" class="save-btn">
-        <i class="fas fa-save"></i> Save Changes
-      </button>
-  
-      <h3 class="subsection-header">Change Password</h3>
-      <div class="form-group">
-        <input type="password" v-model="currentPassword" placeholder="Current Password" class="form-input" />
-      </div>
-      <div class="form-group">
-        <input type="password" v-model="newPassword" placeholder="New Password" class="form-input" />
-      </div>
-      <button @click="changePassword" class="password-btn">
-        <i class="fas fa-key"></i> Update Password
-      </button>
-  
-      <h3 class="subsection-header">Delete Account</h3>
-      <button @click="deleteAccount" class="delete-btn">
-        <i class="fas fa-trash-alt"></i> Delete My Account
-      </button>
-  
-      <!-- Success/Error Messages -->
-      <p v-if="success" ref="messageBox" class="message success">
-        <i class="fas fa-check-circle"></i> {{ success }}
-      </p>
-      <p v-if="error" ref="messageBox" class="message error">
-        <i class="fas fa-exclamation-circle"></i> {{ error }}
-      </p>
+  <div class="pastel-reported-discussions" v-if="user">
+    <!-- Go Back Button -->
+    <button @click="goBackToHome" class="go-back-btn">
+      <i class="fas fa-arrow-left"></i> Go Back to Home
+    </button>
+
+    <h2 class="section-header">Profile Info</h2>
+
+    <!-- Image Upload & Preview -->
+    <div class="upload-box" @dragover.prevent @drop.prevent="onDrop">
+      <input type="file" ref="fileInput" @change="onFileChange" hidden />
+      <img
+        :src="previewUrl || user.photoURL || defaultPhoto"
+        alt="Profile Picture"
+        class="avatar"
+        @click="triggerFileInput"
+      />
+      <p class="upload-text">Click or drag image here to upload</p>
     </div>
-  </template>
-  
-  <script setup>
-  import { ref, reactive, watch, nextTick } from 'vue'
-  import {
-    getAuth,
-    updatePassword,
-    verifyBeforeUpdateEmail,
-    deleteUser,
-    EmailAuthProvider,
-    reauthenticateWithCredential
-  } from 'firebase/auth'
-  import { doc, updateDoc, deleteDoc } from 'firebase/firestore'
-  import { db } from '@/firebase'
-  import { defineProps } from 'vue'
-  
-  const props = defineProps({ user: Object })
-  
-  const auth = getAuth()
-  const userRef = doc(db, 'users', auth.currentUser.uid)
-  
-  const editableUser = reactive({
-    name: '',
-    email: ''
-  })
-  
-  const previewUrl = ref('')
-  const fileInput = ref(null)
-  const defaultPhoto = '/default.png'
-  const currentPassword = ref('')
-  const newPassword = ref('')
-  const success = ref('')
-  const error = ref('')
-  const messageBox = ref(null)
-  
-  watch(
-    () => props.user,
-    (val) => {
-      if (val) {
-        editableUser.name = val.name || ''
-        editableUser.email = val.email || ''
-      }
-    },
-    { immediate: true }
-  )
-  
-  const scrollToMessage = async () => {
-    await nextTick()
-    messageBox.value?.scrollIntoView({ behavior: 'smooth' })
-  }
-  
-  const showSuccess = async (msg) => {
-    success.value = msg
-    error.value = ''
-    await scrollToMessage()
-  }
-  
-  const showError = async (msg) => {
-    error.value = msg
-    success.value = ''
-    await scrollToMessage()
-  }
-  
-  const triggerFileInput = () => fileInput.value?.click()
-  
-  const onFileChange = (e) => {
-    const file = e.target.files[0]
-    if (file) convertToBase64(file)
-  }
-  
-  const onDrop = (e) => {
-    const file = e.dataTransfer.files[0]
-    if (file) convertToBase64(file)
-  }
-  
-  const convertToBase64 = (file) => {
-    const reader = new FileReader()
-    reader.onload = async () => {
-      const base64Image = reader.result
-      previewUrl.value = base64Image
-      try {
-        await updateDoc(userRef, { photoURL: base64Image })
-        await showSuccess('Profile picture updated.')
-      } catch (err) {
-        await showError(err.message)
-      }
+
+    <div class="form-group">
+      <label class="form-label"><strong>Name:</strong></label>
+      <input v-model="editableUser.name" class="form-input" />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label"><strong>Email:</strong></label>
+      <input v-model="editableUser.email" class="form-input" />
+    </div>
+
+    <button @click="saveProfileChanges" class="save-btn">
+      <i class="fas fa-save"></i> Save Changes
+    </button>
+
+    <h3 class="subsection-header">Change Password</h3>
+    <div class="form-group">
+      <input type="password" v-model="currentPassword" placeholder="Current Password" class="form-input" />
+    </div>
+    <div class="form-group">
+      <input type="password" v-model="newPassword" placeholder="New Password" class="form-input" />
+    </div>
+    <button @click="changePassword" class="password-btn">
+      <i class="fas fa-key"></i> Update Password
+    </button>
+
+    <h3 class="subsection-header">Delete Account</h3>
+    <button @click="deleteAccount" class="delete-btn">
+      <i class="fas fa-trash-alt"></i> Delete My Account
+    </button>
+
+    <!-- Success/Error Messages -->
+    <p v-if="success" ref="messageBox" class="message success">
+      <i class="fas fa-check-circle"></i> {{ success }}
+    </p>
+    <p v-if="error" ref="messageBox" class="message error">
+      <i class="fas fa-exclamation-circle"></i> {{ error }}
+    </p>
+  </div>
+</template>
+
+<script setup>
+import { ref, reactive, watch, nextTick } from 'vue'
+import { useRouter } from 'vue-router'
+import {
+  getAuth,
+  updatePassword,
+  verifyBeforeUpdateEmail,
+  deleteUser,
+  EmailAuthProvider,
+  reauthenticateWithCredential
+} from 'firebase/auth'
+import { doc, updateDoc, deleteDoc } from 'firebase/firestore'
+import { db } from '@/firebase'
+import { defineProps } from 'vue'
+
+const props = defineProps({ user: Object })
+
+const router = useRouter() // Vue Router instance
+const auth = getAuth()
+const userRef = doc(db, 'users', auth.currentUser.uid)
+
+const editableUser = reactive({
+  name: '',
+  email: ''
+})
+
+const previewUrl = ref('')
+const fileInput = ref(null)
+const defaultPhoto = '/default.png'
+const currentPassword = ref('')
+const newPassword = ref('')
+const success = ref('')
+const error = ref('')
+const messageBox = ref(null)
+
+watch(
+  () => props.user,
+  (val) => {
+    if (val) {
+      editableUser.name = val.name || ''
+      editableUser.email = val.email || ''
     }
-    reader.readAsDataURL(file)
-  }
-  
-  const saveProfileChanges = async () => {
-    const user = auth.currentUser
+  },
+  { immediate: true }
+)
+
+const scrollToMessage = async () => {
+  await nextTick()
+  messageBox.value?.scrollIntoView({ behavior: 'smooth' })
+}
+
+const showSuccess = async (msg) => {
+  success.value = msg
+  error.value = ''
+  await scrollToMessage()
+}
+
+const showError = async (msg) => {
+  error.value = msg
+  success.value = ''
+  await scrollToMessage()
+}
+
+const triggerFileInput = () => fileInput.value?.click()
+
+const onFileChange = (e) => {
+  const file = e.target.files[0]
+  if (file) convertToBase64(file)
+}
+
+const onDrop = (e) => {
+  const file = e.dataTransfer.files[0]
+  if (file) convertToBase64(file)
+}
+
+const convertToBase64 = (file) => {
+  const reader = new FileReader()
+  reader.onload = async () => {
+    const base64Image = reader.result
+    previewUrl.value = base64Image
     try {
-      await updateDoc(userRef, {
-        name: editableUser.name
+      await updateDoc(userRef, { photoURL: base64Image })
+      await showSuccess('Profile picture updated.')
+    } catch (err) {
+      await showError(err.message)
+    }
+  }
+  reader.readAsDataURL(file)
+}
+
+const saveProfileChanges = async () => {
+  const user = auth.currentUser
+  try {
+    await updateDoc(userRef, {
+      name: editableUser.name
+    })
+
+    if (editableUser.email !== user.email) {
+      await verifyBeforeUpdateEmail(user, editableUser.email, {
+        url: window.location.origin
       })
-  
-      if (editableUser.email !== user.email) {
-        await verifyBeforeUpdateEmail(user, editableUser.email, {
-          url: window.location.origin
-        })
-  
-        await showSuccess(
-          'A verification email has been sent to your new email address. Please confirm it before logging in with the new email.'
-        )
-      } else {
-        await showSuccess('Profile updated successfully.')
-      }
-    } catch (err) {
-      await showError(err.message)
+
+      await showSuccess(
+        'A verification email has been sent to your new email address. Please confirm it before logging in with the new email.'
+      )
+    } else {
+      await showSuccess('Profile updated successfully.')
     }
+  } catch (err) {
+    await showError(err.message)
   }
-  
-  const changePassword = async () => {
-    try {
-      const user = auth.currentUser
-      const credential = EmailAuthProvider.credential(user.email, currentPassword.value)
-      await reauthenticateWithCredential(user, credential)
-      await updatePassword(user, newPassword.value)
-      await showSuccess('Password updated!')
-    } catch (err) {
-      await showError(err.message)
-    }
+}
+
+const changePassword = async () => {
+  try {
+    const user = auth.currentUser
+    const credential = EmailAuthProvider.credential(user.email, currentPassword.value)
+    await reauthenticateWithCredential(user, credential)
+    await updatePassword(user, newPassword.value)
+    await showSuccess('Password updated!')
+  } catch (err) {
+    await showError(err.message)
   }
-  
-  const deleteAccount = async () => {
-    try {
-      if (!confirm('Are you sure you want to permanently delete your account?')) return
-      await deleteDoc(userRef)
-      await deleteUser(auth.currentUser)
-      localStorage.removeItem('hasVisited')
-      await showSuccess('Your account has been deleted. Redirecting...')
-      setTimeout(() => {
-        window.location.href = '/'
-      }, 2000)
-    } catch (err) {
-      await showError(err.message)
-    }
+}
+
+const deleteAccount = async () => {
+  try {
+    if (!confirm('Are you sure you want to permanently delete your account?')) return
+    await deleteDoc(userRef)
+    await deleteUser(auth.currentUser)
+    localStorage.removeItem('hasVisited')
+    await showSuccess('Your account has been deleted. Redirecting...')
+    setTimeout(() => {
+      window.location.href = '/'
+    }, 2000)
+  } catch (err) {
+    await showError(err.message)
   }
-  </script>
-  
-  <style scoped>
+}
+
+// Go back to the home page
+const goBackToHome = () => {
+  router.push('/home') // Navigate to the home page
+}
+</script>
+
+<style scoped>
+/* Add custom styling for the button */
+.go-back-btn {
+  background: #ff69b4;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 5px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 20px;
+}
+
+.go-back-btn i {
+  font-size: 1.2rem;
+}
+
+.go-back-btn:hover {
+  background: #ff4e8f;
+}
+
   /* Base styling from ReportedDiscussions */
   .pastel-reported-discussions {
     max-width: 800px;

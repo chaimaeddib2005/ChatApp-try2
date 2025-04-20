@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router';
+import { getAuth } from 'firebase/auth';
 import LoginPage from '@/components/LoginPage.vue';
 import RegisterPage from '@/components/RegisterPage.vue';
 import WelcomingPage from '@/components/WelcomingPage.vue';
@@ -7,6 +8,7 @@ import ProfilePage from '@/components/ProfilePage.vue';
 import GroupChatView from '@/components/ChatGroupe.vue';
 import CreateGroup from '@/components/CreateGroup.vue';
 import GroupInfos from '@/components/GroupeInfos';
+
 const routes = [
   {
     path:'/GroupInfos/:groupId',
@@ -28,10 +30,10 @@ const routes = [
     path:'/ProfileView',
     name:'ProfileView',
     component: ProfilePage,
+    meta: { requiresAuth: true }
   },
   { path: '/',name: 'Welcoming', component: WelcomingPage },
-  
-  { path: '/register', name: 'RegisterPage',component: RegisterPage,},
+  { path: '/register', name: 'RegisterPage',component: RegisterPage, },
   { path: '/login', component:LoginPage },
   {
     path: '/chat/:chatId',
@@ -43,6 +45,7 @@ const routes = [
     path: '/home',
     name : 'Home',
     component: () => import('@/components/HomePage.vue'),
+    meta: { requiresAuth: true },
     children: [
       {
         path: 'discover',
@@ -58,7 +61,6 @@ const routes = [
       }
     ]
   }
-  
 ];
 
 const router = createRouter({
@@ -69,23 +71,19 @@ const router = createRouter({
   },
 });
 
-import { getAuth } from 'firebase/auth';
-
+// 🚨 Global auth guard
 router.beforeEach((to, from, next) => {
-  const hasVisited = localStorage.getItem('hasVisited');
   const auth = getAuth();
-  const user = auth.currentUser;
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth);
 
-  if (!hasVisited && to.name !== 'Welcoming') {
-    localStorage.setItem('hasVisited', true);
-    return next({ name: 'Welcoming' });
-  }
-
-  if (to.name === 'Welcoming' && user) {
-    // if already logged in, skip the welcoming page
-    return next({ name: 'Home' });
-  }
-
-  next();
+  // Watch for changes in the auth state
+  auth.onAuthStateChanged(user => {
+    if (requiresAuth && !user) {
+      next('/'); // Redirect to the welcome page if not authenticated
+    } else {
+      next(); // Proceed if authenticated
+    }
+  });
 });
+
 export default router;

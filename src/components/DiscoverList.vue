@@ -20,7 +20,7 @@
   
   <script>
   import { db } from '../firebase';
-  import { getAuth } from 'firebase/auth';
+  import { getAuth ,onAuthStateChanged} from 'firebase/auth';
   import { collection, getDocs, doc, updateDoc, getDoc } from 'firebase/firestore';
   
   export default {
@@ -49,31 +49,34 @@
         );
       },
     },
-    async created() {
-      const auth = getAuth();
-      const currentUser = auth.currentUser;
-      if (!currentUser) return;
-      this.currentUserId = currentUser.uid;
-  
-      const currentUserDoc = await getDoc(doc(db, 'users', this.currentUserId));
-      const currentUserData = currentUserDoc.data();
-      this.contacts = currentUserData.Contacts || {};
-      this.sentInvites = currentUserData.sentInvitations || [];
-  
-      const usersSnap = await getDocs(collection(db, 'users'));
-      this.suggestedUsers = usersSnap.docs
-        .filter(doc => doc.id !== this.currentUserId)
-        .map(doc => {
-          const data = doc.data();
-          return {
-            id: doc.id,
-            name: data.name || 'Unnamed',
-            photoURL: data.photoURL || '',
-            invited: this.sentInvites.includes(doc.id),
-            isContact: Object.prototype.hasOwnProperty.call(this.contacts, doc.id),
-          };
-        });
-    },
+
+async created() {
+  const auth = getAuth();
+
+  onAuthStateChanged(auth, async (user) => {
+    if (!user) return;
+    this.currentUserId = user.uid;
+
+    const currentUserDoc = await getDoc(doc(db, 'users', this.currentUserId));
+    const currentUserData = currentUserDoc.data();
+    this.contacts = currentUserData.Contacts || {};
+    this.sentInvites = currentUserData.sentInvitations || [];
+
+    const usersSnap = await getDocs(collection(db, 'users'));
+    this.suggestedUsers = usersSnap.docs
+      .filter(doc => doc.id !== this.currentUserId)
+      .map(doc => {
+        const data = doc.data();
+        return {
+          id: doc.id,
+          name: data.name || 'Unnamed',
+          photoURL: data.photoURL || '',
+          invited: this.sentInvites.includes(doc.id),
+          isContact: Object.prototype.hasOwnProperty.call(this.contacts, doc.id),
+        };
+      });
+  });
+},
     methods: {
       async sendInvitation(toUserId) {
         const senderRef = doc(db, 'users', this.currentUserId);
