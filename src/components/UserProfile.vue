@@ -87,7 +87,7 @@ const editableUser = reactive({
 
 const previewUrl = ref('')
 const fileInput = ref(null)
-const defaultPhoto = '/default.png'
+const defaultPhoto = '/default.jpg'
 const currentPassword = ref('')
 const newPassword = ref('')
 const success = ref('')

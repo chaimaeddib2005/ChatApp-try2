@@ -76,7 +76,7 @@
       <div class="members-list">
         <div v-for="member in membersInfo" :key="member.uid" class="member-card">
           <div class="member-info">
-            <img :src="member.photoURL || 'default-user.jpg'" alt="Member photo" class="member-photo" />
+            <img :src="member.photoURL ||'/default.jpg'" alt="Member photo" class="member-photo" />
             <span>{{ member.name }}</span>
             <span v-if="member.uid === group.admin" class="admin-tag">Admin</span>
           </div>
@@ -97,7 +97,7 @@
       <div class="contacts-list">
         <div v-for="contact in availableContacts" :key="contact.uid" class="contact-card">
           <div class="contact-info">
-            <img :src="contact.photoURL || 'default.jpg'" alt="Contact photo" class="contact-photo" />
+            <img :src="contact.photoURL || '/default.jpg'" alt="Contact photo" class="contact-photo" />
             <span>{{ contact.name || contact.email || 'Unknown User' }}</span>
           </div>
           <button @click="addMemberToGroup(contact.uid)" class="add-btn">
