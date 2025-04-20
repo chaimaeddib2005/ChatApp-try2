@@ -8,7 +8,7 @@
         class="user-card"
       >
         <img 
-          :src="user.photoURL || '/default-profile.png'" 
+          :src="user.photoURL || '/default.jpg'" 
           alt="Profile" 
           class="profile-img"
         />

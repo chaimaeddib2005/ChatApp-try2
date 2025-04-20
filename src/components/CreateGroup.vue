@@ -289,7 +289,7 @@ export default {
 
 h1 {
   text-align: center;
-  color: #d37a14;
+  color: #8b3a3a;
   margin-bottom: 2rem;
   font-size: 2rem;
   font-weight: 600;
@@ -320,7 +320,7 @@ textarea {
 
 input[type="text"]:focus,
 textarea:focus {
-  border-color: #d37a14;
+  border-color:#8b3a3a;
   outline: none;
   box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.2);
   background-color: #fff;
@@ -348,7 +348,7 @@ textarea {
 .submit-button {
   width: 100%;
   padding: 0.9rem;
-  background-color: #d69317;
+  background-color:#8b3a3a;
   color: white;
   border: none;
   border-radius: 8px;
@@ -361,7 +361,7 @@ textarea {
 }
 
 .submit-button:hover {
-  background-color: #d37a14;
+  background-color:#8b3a3a;
   transform: translateY(-1px);
   box-shadow: 0 4px 8px rgba(238, 207, 8, 0.4);
 }
@@ -402,7 +402,7 @@ textarea {
 }
 
 .photo-preview:hover {
-  border-color: #d37a14;
+  border-color:#8b3a3a;
   background-color: #edf2fc;
   transform: scale(1.03);
 }
@@ -411,13 +411,13 @@ textarea {
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: #e19e10;
+  color:#8b3a3a;
 }
 
 .photo-placeholder i {
   font-size: 2.2rem;
   margin-bottom: 0.8rem;
-  color: #d37a14;
+  color: #8b3a3a;
 }
 
 .photo-placeholder span {
