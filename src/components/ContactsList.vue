@@ -10,7 +10,6 @@
       <img :src="contact.photoURL || '/default.jpg'" alt="Profile" class="profile-img" />
       <div class="contact-info">
         <strong>{{ contact.name }}</strong>
-        <p>{{ contact.lastMessage || 'No messages yet' }}</p>
       </div>
     </div>
   </div>
