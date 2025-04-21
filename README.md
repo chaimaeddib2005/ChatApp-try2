@@ -22,3 +22,5 @@ npm run lint
 
 ### Customize configuration
 See [Configuration Reference](https://cli.vuejs.org/config/).
+## The link of the hosted page is :
+https://chatapp-a9297.web.app
